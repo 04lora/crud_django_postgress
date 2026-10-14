@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import RegistroAsistencia
 from .forms import RegistroAsistenciaForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def lista_asistencia(request):
     registros = RegistroAsistencia.objects.all().order_by('-fecha')
     return render(request, 'asistencia/lista.html', {'registros': registros})
 
-
+@login_required
 def crear_asistencia(request):
     if request.method == 'POST':
         form = RegistroAsistenciaForm(request.POST)
@@ -18,7 +19,7 @@ def crear_asistencia(request):
         form = RegistroAsistenciaForm()
     return render(request, 'asistencia/form.html', {'form': form, 'titulo': 'Nuevo Registro'})
 
-
+@login_required
 def editar_asistencia(request, pk):
     registro = get_object_or_404(RegistroAsistencia, pk=pk)
     if request.method == 'POST':
@@ -30,7 +31,7 @@ def editar_asistencia(request, pk):
         form = RegistroAsistenciaForm(instance=registro)
     return render(request, 'asistencia/form.html', {'form': form, 'titulo': 'Editar Registro'})
 
-
+@login_required
 def eliminar_asistencia(request, pk):
     registro = get_object_or_404(RegistroAsistencia, pk=pk)
     if request.method == 'POST':
